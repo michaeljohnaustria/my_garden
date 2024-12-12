@@ -1,16 +1,17 @@
 import re
-from datetime import datetime
-from flask import Flask, jsonify, request
+import json
+from datetime import datetime, timedelta
+from flask import g, Flask, jsonify, request
 from http import HTTPStatus
 import mysql.connector
-from myDB import Config 
+from myDB import Config
 import jwt
-import datetime
-import json
 from werkzeug.security import generate_password_hash, check_password_hash
-from functools import wraps 
+from functools import wraps
 
 app = Flask(__name__)
+
+JWT_SECRET = "austriaaaaaaaaa"
 
 def get_db_connection():
     return mysql.connector.connect(**Config)
@@ -25,7 +26,48 @@ def is_valid_date(date_str):
         return True
     except ValueError:
         return False
+# Implement JWT authentication
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token or not token.startswith("Bearer "):
+            return jsonify({"success": False, "error": "Token is missing or malformed!"}), HTTPStatus.UNAUTHORIZED
+        
+        try:
+            token = token.split(" ")[1] 
+            g.user = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            return jsonify({"success": False, "error": "Token has expired!"}), HTTPStatus.UNAUTHORIZED
+        except jwt.InvalidTokenError:
+            return jsonify({"success": False, "error": "Invalid token!"}), HTTPStatus.UNAUTHORIZED
+        except Exception as e:
+            return jsonify({"success": False, "error": f"An error occurred: {str(e)}"}), HTTPStatus.INTERNAL_SERVER_ERROR
+
+        return f(*args, **kwargs)
     
+    return decorated
+
+# Implement role-based access control
+
+def requires_role(required_roles):
+    if not isinstance(required_roles, list):
+        required_roles = [required_roles]
+
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not hasattr(g, 'user'):
+                return jsonify({"success": False, "error": "User information not found in request!"}), HTTPStatus.FORBIDDEN
+            
+            user_role = g.user.get('role')
+            if user_role not in required_roles:
+                return jsonify({"success": False, "error": f"Access denied! User role '{user_role}' is not allowed."}), HTTPStatus.FORBIDDEN
+            
+            return f(*args, **kwargs)
+        
+        return decorated_function
+    return decorator
 
 # my facts
 
@@ -465,6 +507,17 @@ def delete_vegetable(vegetable_id):
             cursor.close()
         if 'conn' in locals():
             conn.close()
+
+@app.route("/api/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    username = data.get("username")
+    password = data.get("password")
+
+    if username == "mich" and password == "pass":
+        token = jwt.encode({"username": username, "role": "admin"}, JWT_SECRET, algorithm="HS256")
+        return jsonify({"success": True, "token": token})
+    return jsonify({"success": False, "error": "Invalid credentials!"}), HTTPStatus.UNAUTHORIZED
 
 
 if __name__ == "__main__":
