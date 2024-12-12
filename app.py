@@ -1,12 +1,10 @@
 import re
-import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import g, Flask, jsonify, request
 from http import HTTPStatus
 import mysql.connector
 from myDB import Config
 import jwt
-from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 
 app = Flask(__name__)
