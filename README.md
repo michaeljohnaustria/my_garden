@@ -9,11 +9,18 @@ pip install -r requirements.txt
 ```
 
 ## Configuration
-Set the following environment variable:
-```
-DATABASE_URL: The connection string to your MySQL database (e.g., mysql://user:password@localhost/garden_planner).
-SECRET_KEY: A secret key for JWT encoding and decoding.
-```
+To set up the database:
+
+1. Create a MySQL database called garden_planner.
+2. Update the database details in the Flask app.
+
+Environment variables you need:
+
+- ```MYSQL_HOST```: MySQL server (e.g., localhost).
+- ```MYSQL_USER```: Your MySQL username (e.g., root).
+- ```MYSQL_PASSWORD```: Your MySQL password.
+- ```MYSQL_DB```: Database name (e.g., garden_planner).
+- ```SECRET_KEY```: austriaaaaaaaaa
 
 ## API Endpoints
 | **Endpoint**                     | **Method** | **Description**                                   |
