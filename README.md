@@ -1,16 +1,19 @@
 # Garden Planner API
 
 ## Description
-The Garden Planner API is a RESTful web service built with Flask and MySQL, designed to help users manage data related to gardening, including vegetables, pests, soil types, and gardening facts. The API supports JWT authentication and role-based access control for secure and efficient management of gardening data.
+Garden Planner is a web application to help gardeners manage their gardens. It allows users to store and access information about vegetables, soil types, pests, and gardening facts. Key features include managing planting and harvesting times, pest remedies, and soil recommendations. The app also offers secure authentication with role-based access, making it a useful tool for both beginner and experienced gardeners.
 
 ## Installation
+ ```cmd
 pip install -r requirements.txt
+```
 
 ## Configuration
 Set the following environment variable:
-garden_planner.db: The URL for the database connection.
-API Endpoints
-Below is a list of the API endpoints available in the system:
+```
+DATABASE_URL: The connection string to your MySQL database (e.g., mysql://user:password@localhost/garden_planner).
+SECRET_KEY: A secret key for JWT encoding and decoding.
+```
 
 ## API Endpoints
 | **Endpoint**                     | **Method** | **Description**                                   |
@@ -44,28 +47,15 @@ Below is a list of the API endpoints available in the system:
 
 
 ## Testing
-Prerequisites:
-Install all dependencies using pip install -r requirements.txt.
-Ensure that the database is running and the required tables are created.
-Set the environment variables like DATABASE_URL for database connectivity.
-Steps:
-Navigate to the project directory where your test files are located.
-Run the tests using pytest:
-'''bash
-pytest --cov=api.py
-Verify the output for successful test execution and check code coverage.
-
+To test the app, run:
+ ```cmd
+pip install pytest
+pytest my_test.py
+```
 
 ## Git Commit Guidelines
-Use conventional commits to maintain clarity and consistency in commit messages:
-
-feat: New features or enhancements.
-fix: Bug fixes or minor improvements.
-docs: Documentation updates.
-test: Adding or updating tests.
-
 Use commit messages:
-'''bash
+```
 feat: add user authentication
 fix: resolve database connection issue
 docs: update API documentation
