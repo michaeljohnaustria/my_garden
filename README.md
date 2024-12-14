@@ -4,7 +4,6 @@
 The Garden Planner API is a RESTful web service built with Flask and MySQL, designed to help users manage data related to gardening, including vegetables, pests, soil types, and gardening facts. The API supports JWT authentication and role-based access control for secure and efficient management of gardening data.
 
 ## Installation
-'''bash
 pip install -r requirements.txt
 
 ## Configuration
