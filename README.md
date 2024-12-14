@@ -13,6 +13,7 @@ garden_planner.db: The URL for the database connection.
 API Endpoints
 Below is a list of the API endpoints available in the system:
 
+## API Endpoints
 | **Endpoint**                     | **Method** | **Description**                                   |
 |-----------------------------------|------------|---------------------------------------------------|
 | `/api/users`                     | GET        | List all users                                   |
